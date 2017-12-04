@@ -11,7 +11,10 @@ namespace Canducci.MongoDB.Repository.Core
 {
     public interface IRepository<T> : IDisposable
         where T : class, new()
-    {          
+    {
+        IConnect Connect { get; }
+        IMongoCollection<T> Collection { get; }
+        string CollectionName { get; }
 
         T Add(T model);
         IEnumerable<T> Add(IEnumerable<T> models);
