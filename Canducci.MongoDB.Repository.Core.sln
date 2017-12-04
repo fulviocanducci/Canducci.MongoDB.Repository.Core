@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canducci.MongoDB.Repository.Core", "Canducci.MongoDB.Repository.Core\Canducci.MongoDB.Repository.Core.csproj", "{9815FC33-722F-4928-ACDF-BA394AF386BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9815FC33-722F-4928-ACDF-BA394AF386BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9815FC33-722F-4928-ACDF-BA394AF386BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9815FC33-722F-4928-ACDF-BA394AF386BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9815FC33-722F-4928-ACDF-BA394AF386BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B490DCA3-1A09-4F76-B4DC-8E74760932C5}
+	EndGlobalSection
+EndGlobal
