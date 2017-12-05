@@ -39,6 +39,7 @@ namespace Canducci.MongoDB.Repository.Core
         Task<IList<T>> AllAsync(Expression<Func<T, bool>> filter);
         Task<IList<T>> AllAsync<Tkey>(Expression<Func<T, bool>> filter, Expression<Func<T, Tkey>> orderBy);
 
+        IList<T> List(SortDefinition<T> sort, FilterDefinition<T> filter);
         IList<T> List<Tkey>(Expression<Func<T, Tkey>> orderBy, Expression<Func<T, bool>> filter = null);
         Task<IList<T>> ListAsync<Tkey>(Expression<Func<T, Tkey>> orderBy, Expression<Func<T, bool>> filter = null);
 

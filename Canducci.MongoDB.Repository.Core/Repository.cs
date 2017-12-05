@@ -176,12 +176,15 @@ namespace Canducci.MongoDB.Repository.Core
         #endregion
 
         #region list
-
+        public IList<T> List(SortDefinition<T> sort, FilterDefinition<T> filter)
+        {
+            return Collection.Find(filter).Sort(sort).ToList();
+        }
         public IList<T> List<Tkey>(Expression<Func<T, Tkey>> orderBy, Expression<Func<T, bool>> filter = null)
         {
             IMongoQueryable<T> query = Collection.AsQueryable();
             if (filter != null)
-                return query.Where(filter).OrderBy(orderBy).ToList();
+                return query.Where(filter).OrderBy(orderBy).ToList(); 
             return query.OrderBy(orderBy).ToList();
         }
 
