@@ -8,7 +8,7 @@ namespace ConsoleAppMongoDBTest
     {
         static void Main(string[] args)
         {
-            IConfig config = new Config("mongodb://localhost", "dabase", false, false);
+            IConfig config = new Config("mongodb://localhost", "database", false, false);
             IConnect connect = new Connect(config);
             RepositoryPeopleContract repPeople = new RepositoryPeople(connect);
 
