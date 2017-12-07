@@ -54,51 +54,73 @@ namespace Canducci.MongoDB.Repository.Core
 
         #region edit 
         
-        public bool Edit(Expression<Func<T, bool>> filter, T model)
+        public bool Edit(Expression<Func<T, bool>> where, T model)
         {
-            return Collection
-                .ReplaceOne(filter, model)
-                .ModifiedCount > 0;
+            return Collection.ReplaceOne(where, model).ModifiedCount > 0;
         }
 
-        public async Task<bool> EditAsync(Expression<Func<T, bool>> filter, T model)
+        public async Task<bool> EditAsync(Expression<Func<T, bool>> where, T model)
         {
-            ReplaceOneResult result = 
-                await Collection
-                .ReplaceOneAsync(filter, model);
-            return result
-                .ModifiedCount > 0;
+            ReplaceOneResult result = await Collection.ReplaceOneAsync(where, model);
+            return result.ModifiedCount > 0;
+        }
+
+        public bool Edit(FilterDefinition<T> filter, T model)
+        {
+            return Collection.ReplaceOne(filter, model).ModifiedCount > 0;
+        }
+
+        public async Task<bool> EditAsync(FilterDefinition<T> filter, T model)
+        {
+            ReplaceOneResult result = await Collection.ReplaceOneAsync(filter, model);
+            return result.ModifiedCount > 0;
         }
 
         #endregion
 
         #region update
-                
-        public bool Update(Expression<Func<T, bool>> filter, UpdateDefinition<T> update)
+
+        public bool Update(Expression<Func<T, bool>> where, UpdateDefinition<T> update)
         {
-            return Collection
-                .UpdateOne(filter, update)
-                .ModifiedCount > 0;
+            return Collection.UpdateOne(where, update).ModifiedCount > 0;
         }
 
-        public bool UpdateAll(Expression<Func<T, bool>> filter, UpdateDefinition<T> update)
+        public bool UpdateAll(Expression<Func<T, bool>> where, UpdateDefinition<T> update)
         {
-            return Collection
-               .UpdateMany(filter, update)
-               .ModifiedCount > 0;
+            return Collection.UpdateMany(where, update).ModifiedCount > 0;
         }
 
-        public async Task<bool> UpdateAsync(Expression<Func<T, bool>> filter, UpdateDefinition<T> update)
+        public async Task<bool> UpdateAsync(Expression<Func<T, bool>> where, UpdateDefinition<T> update)
         {
-            UpdateResult result = await Collection
-                .UpdateOneAsync(filter, update);
+            UpdateResult result = await Collection.UpdateOneAsync(where, update);
             return result.ModifiedCount > 0;
         }
 
-        public async Task<bool> UpdateAllAsync(Expression<Func<T, bool>> filter, UpdateDefinition<T> update)
+        public async Task<bool> UpdateAllAsync(Expression<Func<T, bool>> where, UpdateDefinition<T> update)
         {
-            UpdateResult result = await Collection
-                .UpdateManyAsync(filter, update);
+            UpdateResult result = await Collection.UpdateManyAsync(where, update);
+            return result.ModifiedCount > 0;
+        }
+
+        public bool Update(FilterDefinition<T> filter, UpdateDefinition<T> update)
+        {
+            return Collection.UpdateOne(filter, update).ModifiedCount > 0;
+        }
+
+        public bool UpdateAll(FilterDefinition<T> filter, UpdateDefinition<T> update)
+        {
+            return Collection.UpdateMany(filter, update).ModifiedCount > 0;
+        }
+
+        public async Task<bool> UpdateAsync(FilterDefinition<T> filter, UpdateDefinition<T> update)
+        {
+            UpdateResult result = await Collection.UpdateOneAsync(filter, update);
+            return result.ModifiedCount > 0;
+        }
+
+        public async Task<bool> UpdateAllAsync(FilterDefinition<T> filter, UpdateDefinition<T> update)
+        {
+            UpdateResult result = await Collection.UpdateManyAsync(filter, update);
             return result.ModifiedCount > 0;
         }
 
@@ -106,94 +128,123 @@ namespace Canducci.MongoDB.Repository.Core
 
         #region find
 
-        public T Find(Expression<Func<T, bool>> filter)
+        public T Find(Expression<Func<T, bool>> where)
         {
-            return Collection
-                .Find(filter)
-                .FirstOrDefault();
+            return Collection.Find(where).FirstOrDefault();
         }
 
-        public async Task<T> FindAsync(Expression<Func<T, bool>> filter)
+        public async Task<T> FindAsync(Expression<Func<T, bool>> where)
         {
-            IAsyncCursor<T> result = await Collection
-               .FindAsync(filter);
-            return result
-                .FirstOrDefault();
+            IAsyncCursor<T> result = await Collection.FindAsync(where);
+            return result.FirstOrDefault();
+        }
+
+        public T Find(FilterDefinition<T> filter)
+        {
+            return Collection.Find(filter).FirstOrDefault();
+        }
+
+        public async Task<T> FindAsync(FilterDefinition<T> filter)
+        {
+            IAsyncCursor<T> result = await Collection.FindAsync(filter);
+            return result.FirstOrDefault();
         }
 
         #endregion
 
         #region all
-        
+
         public IEnumerable<T> All()
         {
-            return Collection
-                .AsQueryable()                
-                .AsEnumerable();
+            return Collection.AsQueryable().AsEnumerable();
         }
 
-        public IEnumerable<T> All(Expression<Func<T, bool>> filter)
+        public IEnumerable<T> All(Expression<Func<T, bool>> where)
         {
-            return Collection
-                .AsQueryable()
-                .Where(filter)
-                .AsEnumerable();
+            return Collection.AsQueryable().Where(where).AsEnumerable();
         }
 
-        public IEnumerable<T> All<Tkey>(Expression<Func<T, bool>> filter, Expression<Func<T, Tkey>> orderBy)
+        public IEnumerable<T> All<Tkey>(Expression<Func<T, bool>> where, Expression<Func<T, Tkey>> orderBy)
         {
-            return Collection
-                .AsQueryable()
-                .Where(filter)
-                .OrderBy(orderBy)
-                .AsEnumerable();
+            return Collection.AsQueryable().Where(where).OrderBy(orderBy).AsEnumerable();
         }
 
         public async Task<IList<T>> AllAsync()
         {
-            return await Collection
-              .AsQueryable()
-              .ToListAsync();
-
+            return await Collection.AsQueryable().ToListAsync();
         }
 
-        public async Task<IList<T>> AllAsync(Expression<Func<T, bool>> filter)
+        public async Task<IList<T>> AllAsync(Expression<Func<T, bool>> where)
         {
-            return await Collection
-                .AsQueryable()
-                .Where(filter)
-                .ToListAsync();
+            return await Collection.AsQueryable().Where(where).ToListAsync();
         }
 
-        public async Task<IList<T>> AllAsync<Tkey>(Expression<Func<T, bool>> filter, Expression<Func<T, Tkey>> orderBy)
+        public async Task<IList<T>> AllAsync<Tkey>(Expression<Func<T, bool>> where, Expression<Func<T, Tkey>> orderBy)
         {               
-            return await Collection    
-                .AsQueryable()
-                .Where(filter)
-                .OrderBy(orderBy)
-                .ToListAsync();
+            return await Collection.AsQueryable().Where(where).OrderBy(orderBy).ToListAsync();
+        }
+
+        public IEnumerable<T> All(FilterDefinition<T> filter)
+        {
+            return Collection.Find(filter).ToEnumerable();
+        }
+
+        public IEnumerable<T> All(FilterDefinition<T> filter, SortDefinition<T> sort)
+        {
+            return Collection.Find(filter).Sort(sort).ToEnumerable();
+        }
+
+        public async Task<IList<T>> AllAsync(FilterDefinition<T> filter)
+        {
+            return await Collection.Find(filter).ToListAsync();
+        }
+
+        public async Task<IList<T>> AllAsync(FilterDefinition<T> filter, SortDefinition<T> sort)
+        {
+            return await Collection.Find(filter).Sort(sort).ToListAsync();
         }
         #endregion
 
         #region list
+
+        public IList<T> List(SortDefinition<T> sort)
+        {
+            return Collection.Find(Builders<T>.Filter.Empty).Sort(sort).ToList();
+        }
+
+        public async Task<IList<T>> ListAsync(SortDefinition<T> sort)
+        {
+            return await Collection.Find(Builders<T>.Filter.Empty).Sort(sort).ToListAsync();
+        }
+
         public IList<T> List(SortDefinition<T> sort, FilterDefinition<T> filter)
         {
             return Collection.Find(filter).Sort(sort).ToList();
         }
-        public IList<T> List<Tkey>(Expression<Func<T, Tkey>> orderBy, Expression<Func<T, bool>> filter = null)
+
+        public async Task<IList<T>> ListAsync(SortDefinition<T> sort, FilterDefinition<T> filter)
         {
-            IMongoQueryable<T> query = Collection.AsQueryable();
-            if (filter != null)
-                return query.Where(filter).OrderBy(orderBy).ToList(); 
-            return query.OrderBy(orderBy).ToList();
+            return await Collection.Find(filter).Sort(sort).ToListAsync();
         }
 
-        public async Task<IList<T>> ListAsync<Tkey>(Expression<Func<T, Tkey>> orderBy, Expression<Func<T, bool>> filter = null)
+        public IList<T> List<Tkey>(Expression<Func<T, Tkey>> orderBy, Expression<Func<T, bool>> where)
+        {            
+            return Collection.AsQueryable().Where(where).OrderBy(orderBy).ToList();             
+        }
+
+        public async Task<IList<T>> ListAsync<Tkey>(Expression<Func<T, Tkey>> orderBy, Expression<Func<T, bool>> where)
+        {            
+            return await Collection.AsQueryable().Where(where).OrderBy(orderBy).ToListAsync();            
+        }
+
+        public IList<T> List<Tkey>(Expression<Func<T, Tkey>> orderBy)
         {
-            IMongoQueryable<T> query = Collection.AsQueryable();
-            if (filter != null)
-                return await query.Where(filter).OrderBy(orderBy).ToListAsync();
-            return await query.OrderBy(orderBy).ToListAsync();
+            return Collection.AsQueryable().OrderBy(orderBy).ToList();
+        }
+
+        public async Task<IList<T>> ListAsync<Tkey>(Expression<Func<T, Tkey>> orderBy)
+        {
+            return await Collection.AsQueryable().OrderBy(orderBy).ToListAsync();
         }
 
         #endregion
@@ -202,45 +253,82 @@ namespace Canducci.MongoDB.Repository.Core
 
         public long Count()
         {
-            return Collection
-                .Count(Builders<T>.Filter.Empty);
+            return Collection.Count(Builders<T>.Filter.Empty);
         }
 
-        public long Count(Expression<Func<T, bool>> filter, CountOptions options = null)
+        public long Count(Expression<Func<T, bool>> where, CountOptions options = null)
         {
-            return Collection
-                .Count(filter, options);
+            return Collection.Count(where, options);
+        }
+
+        public long Count(FilterDefinition<T> filter, CountOptions options = null)
+        {
+            return Collection.Count(filter, options);
         }
 
         public async Task<long> CountAsync()
         {
-            return await Collection
-                .CountAsync(Builders<T>.Filter.Empty);
+            return await Collection.CountAsync(Builders<T>.Filter.Empty);
         }
 
-        public async Task<long> CountAsync(Expression<Func<T, bool>> filter, CountOptions options = null)
+        public async Task<long> CountAsync(Expression<Func<T, bool>> where, CountOptions options = null)
         {
-            return await Collection
-                .CountAsync(filter, options);
+            return await Collection.CountAsync(where, options);
+        }
+
+        public async Task<long> CountAsync(FilterDefinition<T> filter, CountOptions options = null)
+        {
+            return await Collection.CountAsync(filter, options);
         }
 
         #endregion
 
         #region delete
 
-        public bool Delete(Expression<Func<T, bool>> filter)
-        {
-            return Collection
-                .DeleteOne(filter)
-                .DeletedCount > 0;
+        public bool Delete(Expression<Func<T, bool>> where)
+        {            
+            return Collection.DeleteOne(where).DeletedCount > 0;
         }
 
-        public async Task<bool> DeleteAsync(Expression<Func<T, bool>> filter)
+        public async Task<bool> DeleteAsync(Expression<Func<T, bool>> where)
         {
-            DeleteResult result = await Collection.
-                DeleteOneAsync(filter);
+            DeleteResult result = await Collection.DeleteOneAsync(where);
             return result.DeletedCount > 0;
         }
+
+        public bool Delete(FilterDefinition<T> filter)
+        {
+            return Collection.DeleteOne(filter).DeletedCount > 0;
+        }
+
+        public async Task<bool> DeleteAsync(FilterDefinition<T> filter)
+        {
+            DeleteResult result = await Collection.DeleteOneAsync(filter);
+            return result.DeletedCount > 0;
+        }
+
+        public bool DeleteAll(Expression<Func<T, bool>> where)
+        {
+            return Collection.DeleteMany(where).DeletedCount > 0;
+        }
+
+        public async Task<bool> DeleteAllAsync(Expression<Func<T, bool>> where)
+        {
+            DeleteResult result = await Collection.DeleteManyAsync(where);
+            return result.DeletedCount > 0;
+        }
+
+        public bool DeleteAll(FilterDefinition<T> filter)
+        {
+            return Collection.DeleteMany(filter).DeletedCount > 0;
+        }
+
+        public async Task<bool> DeleteAllAsync(FilterDefinition<T> filter)
+        {
+            DeleteResult result = await Collection.DeleteManyAsync(filter);
+            return result.DeletedCount > 0;
+        }
+
 
         #endregion
 
@@ -248,8 +336,7 @@ namespace Canducci.MongoDB.Repository.Core
 
         public IMongoQueryable<T> Query()
         {
-            return Collection
-                .AsQueryable();
+            return Collection.AsQueryable();
         }
 
         #endregion
@@ -295,7 +382,10 @@ namespace Canducci.MongoDB.Repository.Core
                 }
                 disposed = true;
             }
-        }   
+        }
+
+        
+
         ~Repository()
         {
             Dispose(false);
